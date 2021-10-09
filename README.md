@@ -3,13 +3,15 @@ Simple ssh client with go
 
 ## Execute command
 ```
-client,err:=NewSSHClient("host", "root", "passwd")
+import "github.com/yusys-cloud/go-ssh"
+
+client,err:=ssh.NewSSHClient("host", "root", "passwd")
 
 stdout, stderr, err := client.ExecuteCmd("pwd")
 ```
 ## Execute command with private key
 ``` 
-client, err:=NewSSHClientWithKey("host","root","/Users/user/.ssh/id_rsa")
+client, err:=ssh.NewSSHClientWithKey("host","root","/Users/user/.ssh/id_rsa")
 stdout, stderr, err := client.ExecuteCmd("pwd")
 ```
 ## File upload
