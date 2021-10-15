@@ -7,7 +7,9 @@ import (
 	"bytes"
 	"golang.org/x/crypto/ssh"
 	"io/ioutil"
+	"log"
 	"net"
+	"time"
 )
 
 type SSHClient struct {
@@ -22,11 +24,13 @@ func NewSSHClient(hostname string, username string, password string) (*SSHClient
 		Auth: []ssh.AuthMethod{
 			ssh.Password(password),
 		},
+		Timeout:         time.Duration(time.Second * 30),
 		HostKeyCallback: ssh.HostKeyCallback(func(hostname string, remote net.Addr, key ssh.PublicKey) error { return nil }),
 	}
 
 	client, err := ssh.Dial("tcp", hostname+":22", conf)
 	if err != nil {
+		log.Println("Get ssh channel error:" + err.Error())
 		return nil, err
 	}
 
@@ -61,6 +65,9 @@ func NewSSHClientWithKey(hostname string, username string, privateKeyfile string
 }
 
 func (s *SSHClient) Close() error {
+	if s == nil || s.Client == nil {
+		return nil
+	}
 	return s.Client.Close()
 }
 
