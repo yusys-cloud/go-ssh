@@ -9,7 +9,7 @@ import (
 )
 
 func initClient() (*SSHClient, error) {
-	return NewSSHClient("host", "root", "")
+	return NewSSHClientWithPort("food", "root", "1", "22")
 }
 
 var client, err = initClient()
@@ -67,7 +67,6 @@ func TestSSHClient_ExecuteTarCmd(t *testing.T) {
 	client.Close()
 }
 
-
 func TestSSHClient_UploadFile(t *testing.T) {
 	client.ExecuteCmd("mkdir /root/chaos")
 	stdout, stderr, err := client.UploadFile("/Users/zqy/test/tmp2/t.html", "/root/chaos/tt.html")
@@ -75,6 +74,6 @@ func TestSSHClient_UploadFile(t *testing.T) {
 		t.Error(err.Error())
 	}
 
-	stdout, stderr, err=client.ExecuteCmd("cat /root/chaos/tt.html")
+	stdout, stderr, err = client.ExecuteCmd("cat /root/chaos/tt.html")
 	log.Println(stdout, stderr)
 }

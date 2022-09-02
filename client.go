@@ -19,6 +19,10 @@ type SSHClient struct {
 }
 
 func NewSSHClient(hostname string, username string, password string) (*SSHClient, error) {
+	return NewSSHClientWithPort(hostname, username, password, "22")
+}
+
+func NewSSHClientWithPort(hostname string, username string, password string, port string) (*SSHClient, error) {
 	conf := &ssh.ClientConfig{
 		User: username,
 		Auth: []ssh.AuthMethod{
@@ -28,7 +32,7 @@ func NewSSHClient(hostname string, username string, password string) (*SSHClient
 		HostKeyCallback: ssh.HostKeyCallback(func(hostname string, remote net.Addr, key ssh.PublicKey) error { return nil }),
 	}
 
-	client, err := ssh.Dial("tcp", hostname+":22", conf)
+	client, err := ssh.Dial("tcp", hostname+":"+port, conf)
 	if err != nil {
 		log.Println("Get ssh channel error:" + err.Error())
 		return nil, err
